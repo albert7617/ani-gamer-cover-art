@@ -1,0 +1,26 @@
+{
+
+    "description": "顯示動畫瘋封面",
+    "manifest_version": 2,
+    "name": "動畫瘋封面",
+    "version": "1.0",
+    "homepage_url": "https://github.com/albert7617/ani-gamer-cover-art",
+    "permissions": [
+        "*://api.gamer.com.tw/*"
+    ],
+    "host_permissions": [
+        "*://api.gamer.com.tw/*"
+    ],
+    "icons": {
+      "48": "icons/dragon-64.png"
+    },
+  
+    "content_scripts": [
+      {
+        "matches": ["*://ani.gamer.com.tw/*"],
+        "js": ["cover.js"],
+        "run_at": "document_idle"
+      }
+    ]
+  
+  }

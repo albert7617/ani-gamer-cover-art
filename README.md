@@ -1,0 +1,1 @@
+# An extension that show video thumbnail for ani.gamer.com.tw
