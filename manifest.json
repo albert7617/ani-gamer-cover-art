@@ -3,7 +3,7 @@
     "description": "顯示動畫瘋封面",
     "manifest_version": 2,
     "name": "動畫瘋封面",
-    "version": "1.0",
+    "version": "1.1",
     "homepage_url": "https://github.com/albert7617/ani-gamer-cover-art",
     "permissions": [
         "*://api.gamer.com.tw/*"
