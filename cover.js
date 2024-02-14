@@ -35,9 +35,10 @@ function setCoverArt (src) {
     imgObj.style.minWidth = "100%";
     imgObj.style.minHeight = "100%";
 
-    r18.appendChild(imgObj);
+    // Sanitize inserted element
+    cleanImgObj = new DOMParser().parseFromString(DOMPurify.sanitize(imgObj), 'text/html').body.childNodes[0];
 
-    console.log();
+    r18.appendChild(cleanImgObj);
 }
 
 let url = window.location.href;
