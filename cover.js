@@ -3,6 +3,35 @@ const LOG_PREFIX = "[ani-cover] ";
 let jsInitChecktimer;
 let artUrl;
 
+let previousUrl = '';
+let observer = new MutationObserver(function (mutations) {
+    if (location.href !== previousUrl) {
+        previousUrl = location.href;
+        console.log(`URL data changed to ${location.href}`);
+        updateCoverArt();
+    }
+});
+
+const config = {attributes: true, childList: true, subtree: true};
+
+function updateCoverArt() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const sn = urlParams.get("sn");
+    const urlGet = "https://api.gamer.com.tw/mobile_app/anime/v4/video.php?sn="+sn;
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            artUrl = JSON.parse(this.responseText).data.video.cover;
+            jsInitChecktimer = setInterval(checkForR18, 100);
+        }
+    };
+    xhttp.open("GET", urlGet, true);
+    xhttp.send();
+    observer.observe(document, config);
+}
+
 function checkForR18 () {
     if (document.getElementsByClassName("R18").length != 0) {
         clearInterval (jsInitChecktimer);
@@ -43,20 +72,7 @@ function setCoverArt (src) {
 
 let url = window.location.href;
 if (url.includes("animeVideo.php")) {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const sn = urlParams.get("sn");
-    const urlGet = "https://api.gamer.com.tw/mobile_app/anime/v4/video.php?sn="+sn;
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            artUrl = JSON.parse(this.responseText).data.video.cover;
-            jsInitChecktimer = setInterval(checkForR18, 100);
-        }
-    };
-    xhttp.open("GET", urlGet, true);
-    xhttp.send();
+    updateCoverArt();
 }
 
 browser.tabs.onUpdated.addListener(function(tabId, changeInfo) {
@@ -66,6 +82,3 @@ browser.tabs.onUpdated.addListener(function(tabId, changeInfo) {
 })
 
 // <a href="https://www.flaticon.com/free-icons/dragon" title="dragon icons">Dragon icons created by Icongeek26 - Flaticon</a>
-
-
-
