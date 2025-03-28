@@ -4,10 +4,13 @@ let jsInitChecktimer;
 let artUrl;
 
 let previousUrl = '';
+let updated = false;
+
 let observer = new MutationObserver(function (mutations) {
     if (location.href !== previousUrl) {
         previousUrl = location.href;
         console.log(`URL data changed to ${location.href}`);
+        updated = false;
         updateCoverArt();
     }
 });
@@ -41,6 +44,10 @@ function checkForR18 () {
 
 
 function setCoverArt (src) {
+    if (updated) {
+        return;
+    }
+
     console.log(LOG_PREFIX + "In setCoverArt");
     let r18s = document.getElementsByClassName("R18");
     if (r18s.length != 1) {
@@ -68,6 +75,8 @@ function setCoverArt (src) {
     cleanImgObj = new DOMParser().parseFromString(DOMPurify.sanitize(imgObj), 'text/html').body.childNodes[0];
 
     r18.appendChild(cleanImgObj);
+    
+    updated = true;
 }
 
 let url = window.location.href;
